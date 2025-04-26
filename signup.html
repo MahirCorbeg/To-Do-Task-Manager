@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - To-Do Task Manager</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1a1a2e;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .signup-form {
+      background-color: #16213e;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
+      width: 100%;
+      max-width: 400px;
+    }
+    .form-control {
+      border-radius: 20px;
+      background-color: #0f3460;
+      color: #ffffff;
+    }
+    .btn-custom {
+      border-radius: 20px;
+      padding: 10px 30px;
+      font-size: 1.2rem;
+    }
+    a {
+      color: #00adb5;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="signup-form">
+    <h2 class="text-center mb-4">Create Account</h2>
+    <form id="signupForm">
+  <div class="mb-3">
+    <input type="text" class="form-control" id="fullname" placeholder="Full Name" required>
+  </div>
+  <div class="mb-3">
+    <input type="email" class="form-control" id="email" placeholder="Email Address" required>
+  </div>
+  <div class="mb-3">
+    <input type="password" class="form-control" id="password" placeholder="Password" required>
+  </div>
+  <div class="mb-3">
+    <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
+  </div>
+  <button type="submit" class="btn btn-primary btn-custom w-100">Sign Up</button>
+</form>
+    <p class="text-center mt-3">
+      Already have an account? <a href="signin.html">Sign In</a>
+    </p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Firebase App (the core Firebase SDK) -->
+<script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAfOazjh86BeLAJDiN1U1DXcfCBabFEtmE",
+    authDomain: "to-do-task-manager-ca973.firebaseapp.com",
+    projectId: "to-do-task-manager-ca973",
+    storageBucket: "to-do-task-manager-ca973.appspot.com",
+    messagingSenderId: "915415181576",
+    appId: "1:915415181576:web:1ff8f62269dd7cc5b0e4bd"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+<script>
+  const signupForm = document.getElementById('signupForm');
+
+  signupForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const fullName = document.getElementById('fullname').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    if (password !== confirmPassword) {
+      alert('Passwords do not match!');
+      return;
+    }
+
+    // Kreiraj novog korisnika
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // User created successfully
+        const user = userCredential.user;
+
+        // Update user profile sa imenom
+        return user.updateProfile({
+          displayName: fullName
+        });
+      })
+      .then(() => {
+        // Nakon uspješnog ažuriranja profila, idi na Sign In
+        window.location.href = "signin.html";
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  });
+</script>
+</body>
+</html>
