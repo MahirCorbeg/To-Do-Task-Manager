@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - To-Do Task Manager</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1a1a2e;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .signin-form {
+      background-color: #16213e;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
+      width: 100%;
+      max-width: 400px;
+    }
+    .form-control {
+      border-radius: 20px;
+      background-color: #0f3460;
+      color: #ffffff;
+    }
+    .btn-custom {
+      border-radius: 20px;
+      padding: 10px 30px;
+      font-size: 1.2rem;
+    }
+    a {
+      color: #00adb5;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="signin-form">
+    <h2 class="text-center mb-4">Welcome Back</h2>
+    <form id="signinForm">
+      <div class="mb-3">
+        <input type="email" class="form-control" id="email" placeholder="Email Address" required>
+      </div>
+      <div class="mb-3">
+        <input type="password" class="form-control" id="password" placeholder="Password" required>
+      </div>
+      <button type="submit" class="btn btn-success btn-custom w-100">Sign In</button>
+    </form>
+    <p class="text-center mt-3">
+      Don't have an account? <a href="signup.html">Sign Up</a>
+    </p>
+  <div class="text-center mt-3">
+    <p class="text-center mt-2">
+    <a href="#" id="googleSignInLink" style="color: #00adb5; text-decoration: none;">Sign In with Google</a>
+</p>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Firebase App (the core Firebase SDK) -->
+  <!-- Core Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth-compat.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAfOazjh86BeLAJDiN1U1DXcfCBabFEtmE",
+    authDomain: "to-do-task-manager-ca973.firebaseapp.com",
+    projectId: "to-do-task-manager-ca973",
+    storageBucket: "to-do-task-manager-ca973.appspot.com",
+    messagingSenderId: "915415181576",
+    appId: "1:915415181576:web:1ff8f62269dd7cc5b0e4bd"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+<script>
+  const signinForm = document.getElementById('signinForm');
+
+  signinForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // User successfully signed in
+        const user = userCredential.user;
+        // Redirect to dashboard
+        window.location.href = "dashboard.html";
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  });
+</script>
+<script>
+  const googleSignInLink = document.getElementById('googleSignInLink');
+
+  const provider = new firebase.auth.GoogleAuthProvider();
+
+  googleSignInLink.addEventListener('click', function(e) {
+    e.preventDefault(); // spriječi reload stranice
+    firebase.auth().signInWithPopup(provider)
+      .then((result) => {
+        const user = result.user;
+        // Redirect to dashboard
+        window.location.href = "dashboard.html";
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  });
+</script>
+</body>
+</html>
